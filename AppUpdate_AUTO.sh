@@ -115,8 +115,14 @@ check_prerequisites() {
     
     # Check if pm2 is installed
     if ! command -v pm2 &> /dev/null; then
-        print_error "PM2 is not installed"
-        all_good=false
+        print_warning "PM2 is not installed, installing now..."
+        npm install -g pm2
+        if command -v pm2 &> /dev/null; then
+            print_success "PM2 installed successfully"
+        else
+            print_error "Failed to install PM2"
+            all_good=false
+        fi
     else
         print_success "PM2 is installed"
     fi
