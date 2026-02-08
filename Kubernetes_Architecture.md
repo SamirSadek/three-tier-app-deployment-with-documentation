@@ -74,7 +74,3 @@ kubectl describe ingress -n bmi-health
 - Use readiness probes to prevent traffic routing to pods that are not ready.
 - Configure backups for Postgres (cronjobs to dump or managed backups).
 
-If you want, I can:
-- Convert Postgres and Redis to `StatefulSet` manifests with headless services.
-- Add `HorizontalPodAutoscaler` for the backend and frontend.
-- Add TLS + cert-manager example for Ingress.

@@ -67,10 +67,3 @@ Example image names (Docker Hub):
 - For integration tests that require Postgres, consider adding a job service in the workflow that starts a `postgres` service and runs tests against it.
 - For secure credential handling in production, prefer GitHub Actions secrets, or a secrets manager integrated into your CD.
 
-## Next steps (optional)
-
-- Add `workflow_dispatch` to enable manual runs.
-- Add a CD workflow that pulls images and updates your deployment (Kubernetes, Docker Swarm, or host VM).
-- Add integration test job using the `services:` key to spin up Postgres inside the runner.
-
-If you want, I can update the workflows to use GHCR, add `workflow_dispatch`, or add an integration test job now.

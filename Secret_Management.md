@@ -151,7 +151,3 @@ kubectl apply -f kubernetes/secrets/api-keys.yaml
 kubectl rollout restart deployment/backend -n bmi-health
 kubectl rollout restart deployment/frontend -n bmi-health
 ```
-
-If you'd like, I can:
-- Produce `SealedSecret` manifests using a cluster public key (if you provide access), or
-- Add `external-secrets` integration examples for Vault/GCP/AWS.

@@ -33,7 +33,7 @@ Logs collected:
 
 ### Grafana
 - `grafana-deployment.yaml` — Deployment, Service, and datasource ConfigMap
-- Datasources: Prometheus and Loki pre-configured
+- Datasources: Prometheus and Loki pre-configured..
 - Admin user: `admin` / `admin` (change password on first login)
 
 ### Alerting
@@ -225,15 +225,4 @@ Watch the Prometheus Alerts tab — alert should fire within 1 minute.
 - **Loki not collecting logs**: Verify Promtail is running on all nodes: `kubectl get daemonset -n bmi-health`.
 - **Grafana not connecting to Prometheus**: test connectivity: `kubectl exec -n bmi-health <grafana-pod> -- curl http://prometheus:9090 -v`.
 
-## Next Steps (Optional)
 
-- Add `AlertManager` deployment and configure integrations (Slack, PagerDuty, email).
-- Use Prometheus Operator for advanced ServiceMonitor / PrometheusRule CRDs.
-- Integrate with kube-state-metrics for richer Kubernetes metadata.
-- Add custom business metrics to the backend application.
-- Set up log alerting rules (e.g., alert on ERROR logs).
-
-If you'd like, I can:
-- Create AlertManager + Slack/email integration examples
-- Add kube-state-metrics Deployment
-- Add backend prometheus client library examples

@@ -90,12 +90,3 @@ docker-compose down -v
 docker-compose up --build
 ```
 
-## Optional improvements
-
-- Add `HEALTHCHECK` lines to Dockerfiles so orchestrators can mark failing containers.
-- Run backend migrations on startup (idempotent migration runner) instead of relying solely on Postgres init scripts.
-- Switch to `npm ci` for reproducible installs in CI and local builds.
-- Use a non-root user in runtime images.
-- Use multi-arch images and automated CI that builds and publishes manifests.
-
-If you want, I can update the Dockerfiles to add `HEALTHCHECK`, non-root users, and a simple migration runner in the backend.
