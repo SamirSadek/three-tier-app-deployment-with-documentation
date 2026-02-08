@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_USER: bmi_user
+      POSTGRES_PASSWORD: change_me
+      POSTGRES_DB: bmidb
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./backend/migrations:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: ./backend
+    restart: on-failure
+    environment:
+      PORT: 3000
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: bmidb
+      DB_USER: bmi_user
+      DB_PASSWORD: change_me
+      DATABASE_URL: postgresql://bmi_user:change_me@db:5432/bmidb
+      NODE_ENV: production
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+
+  frontend:
+    build: ./frontend
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+
+volumes:
+  db_data:

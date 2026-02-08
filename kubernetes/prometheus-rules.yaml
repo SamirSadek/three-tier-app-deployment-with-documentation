@@ -1,0 +1,79 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: bmi-health-alerts
+  namespace: bmi-health
+spec:
+  groups:
+    - name: bmi-health.rules
+      interval: 30s
+      rules:
+        - alert: HighErrorRate
+          expr: |
+            (sum(rate(http_requests_total{status=~"5.."}[5m])) by (job) / sum(rate(http_requests_total[5m])) by (job)) > 0.05
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "High error rate detected on {{ $labels.job }}"
+            description: "{{ $labels.job }} has error rate of {{ $value | humanizePercentage }}"
+
+        - alert: PodCrashLooping
+          expr: |
+            rate(kube_pod_container_status_restarts_total[1h]) > 0
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Pod {{ $labels.pod }} is crash looping"
+            description: "Pod {{ $labels.pod }} has restarted {{ $value }} times in 1 hour"
+
+        - alert: BackendDown
+          expr: |
+            up{job="backend"} == 0
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Backend is down"
+            description: "Backend service is unreachable"
+
+        - alert: PostgresDown
+          expr: |
+            up{job="postgres-exporter"} == 0
+          for: 1m
+          labels:
+            severity: critical
+          annotations:
+            summary: "PostgreSQL is down"
+            description: "PostgreSQL database is unreachable"
+
+        - alert: RedisDown
+          expr: |
+            up{job="redis-exporter"} == 0
+          for: 1m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Redis is down"
+            description: "Redis cache is unreachable"
+
+        - alert: HighMemoryUsage
+          expr: |
+            (container_memory_usage_bytes / container_spec_memory_limit_bytes) > 0.85
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "High memory usage in {{ $labels.pod_name }}"
+            description: "Memory usage is at {{ $value | humanizePercentage }} of limit"
+
+        - alert: HighCPUUsage
+          expr: |
+            (rate(container_cpu_usage_seconds_total[5m]) / container_spec_cpu_quota) > 0.85
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "High CPU usage in {{ $labels.pod_name }}"
+            description: "CPU usage is at {{ $value | humanizePercentage }} of limit"
